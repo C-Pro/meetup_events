@@ -3,7 +3,7 @@
 Simple Firebase function that serves as intent fullfilment handler for dialogflow (Actions on Google).
 My action currently has only one welcome intent (`next_meetup`), that announces next upcoming meetup in my meetup.com group.
 
-It aquires events using meetup v2 API, translates texts to English if user locale is not ru-RU using Google Cloud Translation API and caches its response to Firebase Firestore, to avoid abusing Meetup API and Cloud Translation API (which does not have free tier).
+It acquires events using meetup v2 API, translates texts to English if user locale is not ru-RU using Google Cloud Translation API and caches its response to Firebase Firestore, to avoid abusing Meetup API and Cloud Translation API (which does not have free tier).
 
 It is quite hacky, feel free to add issues.
 
