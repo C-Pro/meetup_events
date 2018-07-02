@@ -78,7 +78,7 @@ app.intent('next_meetup', conv => {
                         date.setTime(date.getTime() + 1000 * 60 * 60 * 10);
 
                         time = `<say-as interpret-as="time">${date.toISOString().slice(11,19)}</say-as>`;
-                        date = `<say-as interpret-as="date">${date.toISOString().slice(0,10)}</say-as>`;
+                        date = `<say-as interpret-as="date" format="yyyy-mm-dd" detail="1">${date.toISOString().slice(0,10)}</say-as>`;
                     }
                     name =  ev.results[0].name;
                     venue = (ev.results[0].venue === undefined)? "" : ev.results[0].venue.name;
