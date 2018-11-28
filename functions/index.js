@@ -31,7 +31,7 @@ app.intent('next_meetup', conv => {
         const eventResult = firestore.doc(`EventCache/${locale}`);
         return eventResult.get()
         .then(ev => {
-            console.log(ev.data());
+            //console.log(ev.data());
             if (ev.exists && ((new Date) - ev.data().TS) < 60 * 60 * 1000) {
                 console.log('Returning value from cache');
                 return ev.data();
@@ -58,6 +58,8 @@ app.intent('next_meetup', conv => {
 
     const setCache = (locale, Data) => {
         const eventResult = firestore.doc(`EventCache/${locale}`);
+        console.log("Event result:", eventResult);
+        console.log("Data:", Data);
         eventResult.set(Data)
             .then(console.log("Stored data"))
             .catch(err => console.log(err));
@@ -68,8 +70,7 @@ app.intent('next_meetup', conv => {
             return getEventsPromise.then((ev) =>
             {
                 if (ev && ev.results.length > 0) {
-                    console.log(ev.results);
-                    description = striptags(ev.results[0].description, [], '');
+                    var description = striptags(ev.results[0].description, [], '');
                     var date = "";
                     var time = "";
                     if (ev.results[0].time) {
@@ -80,8 +81,9 @@ app.intent('next_meetup', conv => {
                         time = `<say-as interpret-as="time">${date.toISOString().slice(11,19)}</say-as>`;
                         date = `<say-as interpret-as="date" format="yyyy-mm-dd" detail="1">${date.toISOString().slice(0,10)}</say-as>`;
                     }
-                    name =  ev.results[0].name;
-                    venue = (ev.results[0].venue === undefined)? "" : ev.results[0].venue.name;
+                    var name =  (ev.results[0].name === undefined)? "Встреча" : ev.results[0].name;
+                    var venue = (ev.results[0].venue === undefined)? "" : ev.results[0].venue.name;
+                    var photo_url = (ev.results[0].photo_url === undefined)? "https://secure.meetupstatic.com/s/img/5455565085016210254/logo/svg/logo--script.svg" : ev.results[0].photo_url;
 
                     if (conv.user.locale === 'ru-RU') {
                         var Data = {"TS": new Date,
@@ -89,7 +91,7 @@ app.intent('next_meetup', conv => {
 									"Name": name,
 									"Description": description,
 									"URL": ev.results[0].event_url,
-									"ImageURL": ev.results[0].photo_url};
+									"ImageURL": photo_url};
 
                         setCache(conv.user.locale, Data);
                         return Data;
@@ -105,7 +107,7 @@ app.intent('next_meetup', conv => {
 										"Name": name,
 										"Description": description,
 										"URL": ev.results[0].event_url,
-										"ImageURL": ev.results[0].photo_url};
+										"ImageURL": photo_url};
                             setCache(conv.user.locale, Data);
                             return Data;
                         }).catch(err => {console.log(err)});
